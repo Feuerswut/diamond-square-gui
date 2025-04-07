@@ -6,7 +6,7 @@ import opensimplex
 from terrain_edges  import *
 from PIL            import Image, ImageFilter
 
-def add_noise(heightmap, ttype='simplex', scale=0.01, strength=0.4, seed=0):
+def add_noise(heightmap: np.ndarray, ttype='simplex', scale=0.01, strength=0.4, seed=0) -> np.ndarray:
     new_map = np.copy(heightmap)
     if ttype == 'perlin':
         np.random.seed(seed)
@@ -95,7 +95,7 @@ def hydraulic_erosion(
 
     return heightmap
 
-def thermal_erosion(heightmap, iterations=12, talus_angle=0.06, thermal_coefficient=0.5):
+def thermal_erosion(heightmap: np.ndarray, iterations=12, talus_angle=0.06, thermal_coefficient=0.5) -> np.ndarray:
     """
     Simulate thermal erosion on the heightmap to modify terrain features.
     :param heightmap: 2D numpy array representing the terrain.
@@ -174,7 +174,7 @@ def single_diamond_square_step(d, w, s, avg, step=0, steps=0):
             d[i, j] = avg(d, i, j, v, square) + random.uniform(-s, s)
         print(f"[INFO] diamond_square: [{step}/{steps}] square0 [{i}/{n+1}]                ", end='\r')
 
-def make_diamond_square(corner_values, steps, boundary_type, roughness):
+def make_diamond_square(corner_values: list[int, int], steps: int, boundary_type: str, roughness: int):
     array = np.zeros((steps, steps))
 
     # Set initial corner values

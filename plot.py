@@ -91,7 +91,8 @@ def grayscale(array, resize=False, **kwargs):
         raise ValueError("Expected a 2D numpy array for grayscale images.")
     
     if resize:
-        resized_array = np.zeros(new_shape, dtype=np.uint16)
+        pass
+        # resized_array = np.zeros(new_shape, dtype=np.uint16)
 
     # Create PIL Image from the normalized array
     image = Image.fromarray(normalized_array, mode='I;16')
