@@ -1,43 +1,73 @@
-import math
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.slider import Slider
 from kivy.uix.label import Label
+from kivy.properties import StringProperty, ObjectProperty, NumericProperty, BooleanProperty
+from math import log2
 
 class SliderWidget(BoxLayout):
-    def __init__(self, setting_key, settings, min_value=0, max_value=100, font_size=16, integer=False, **kwargs):
+    setting_key = StringProperty('')
+    settings = ObjectProperty(None)
+    min_value = NumericProperty(0)
+    max_value = NumericProperty(100)
+    integer = BooleanProperty(False)
+    font_size = NumericProperty(16)
+
+    def __init__(self, **kwargs):
         super().__init__(orientation='vertical', **kwargs)
-        self.setting_key = setting_key
-        self.settings = settings
-        self.integer = integer
-
-        self.label = Label(font_size=font_size)
-        self.slider = Slider(min=min_value, max=max_value)
+        self.label = Label(font_size=self.font_size)
+        self.slider = Slider(min=self.min_value, max=self.max_value)
         self.slider.bind(value=self._on_value_change)
-
         self.add_widget(self.label)
         self.add_widget(self.slider)
-        self._update_label(settings.get(setting_key, 0))
+
+        # Update slider and label once properties are set
+        self.bind(setting_key=self._update_from_settings,
+                  settings=self._update_from_settings,
+                  min_value=self._update_slider_range,
+                  max_value=self._update_slider_range)
+
+    def _update_slider_range(self, *args):
+        self.slider.min = self.min_value
+        self.slider.max = self.max_value
+
+    def _update_from_settings(self, *args):
+        if not self.settings or not self.setting_key:
+            return
+        value = self.settings.get(self.setting_key, self.min_value)
+        if self.integer:
+            value = int(value)
+        self.set_value(value)
 
     def _on_value_change(self, instance, value):
         value = int(round(value)) if self.integer else value
         self._update_label(value)
-        self._update_setting(value)
+        if self.settings and self.setting_key:
+            self.settings.set(self.setting_key, value)
 
     def _update_label(self, value):
         self.label.text = f'{self.setting_key}: {value:.1f}'
 
-    def _update_setting(self, value):
-        self.settings.set(self.setting_key, value)
+    def set_value(self, value):
+        # Update slider value and label
+        self.slider.value = value
+        self._update_label(value)
+
 
 class ExponentialSliderWidget(SliderWidget):
-    def __init__(self, setting_key, settings, min_value=0, max_value=10, **kwargs):
-        super().__init__(setting_key, settings, min_value=min_value, max_value=max_value, **kwargs)
-        self._update_label(self.settings.get(setting_key, 0))
+    def set_value(self, value):
+        # Convert real value to slider value (log2 scale)
+        try:
+            slider_val = log2(value - 1)
+        except (ValueError, TypeError):
+            slider_val = self.min_value  # fallback safe default
+        self.slider.value = slider_val
+        self._update_label(value)
 
     def _on_value_change(self, instance, value):
         exp_val = (2 ** int(round(value))) + 1
         self._update_label(exp_val)
-        self._update_setting(exp_val)
+        if self.settings and self.setting_key:
+            self.settings.set(self.setting_key, exp_val)
 
     def _update_label(self, value):
         self.label.text = f'{self.setting_key}: {value}'

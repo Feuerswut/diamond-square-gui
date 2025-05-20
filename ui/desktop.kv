@@ -16,18 +16,8 @@
             do_scroll_x: False
             do_scroll_y: True
 
-            BoxLayout:
-                id: controls_box
-                orientation: "vertical"
-                size_hint_y: None
-                height: self.minimum_height
-                spacing: dp(10)
-
-                Label:
-                    id: status_label
-                    text: "Idle"
-                    size_hint_y: None
-                    height: dp(30)
+            ContentWidget:
+                id: content_desktop
 
         BoxLayout:
             size_hint_y: None

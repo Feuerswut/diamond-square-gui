@@ -1,5 +1,5 @@
 import ui.widgets.buttons
-import ui.widgets.popup
+import ui.widgets.content
 import ui.widgets.resizable
 import ui.widgets.scrollable
 import ui.widgets.selectors
