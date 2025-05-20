@@ -2,11 +2,11 @@ import os
 from kivy.app import App
 from kivy.lang import Builder
 
-from ui.root import RootWindow
+from ui.windows.root import RootWindow
 from settings.store import settings
 
 class DiamondSquareApp(App):
-    kv_directory = os.path.join(os.path.dirname(__file__), "ui")
+    kv_directory = os.path.join(os.path.dirname(__file__), "ui/windows")
     kv_file = "root.kv"
 
     def build(self):

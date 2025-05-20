@@ -6,7 +6,8 @@ import os
 from kivy.clock import Clock
 from kivy.properties import StringProperty
 from kivy.core.window import Window
-Window.minimum_width = 200 # minimum width in pixels
+Window.minimum_width  = 160 # minimum width in pixels
+Window.minimum_height = 300 # minimum width in pixels
 
 from kivy.uix.boxlayout import BoxLayout
 from kivy.lang import Builder

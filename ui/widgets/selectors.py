@@ -2,26 +2,31 @@ from kivy.uix.gridlayout import GridLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.properties import StringProperty, ObjectProperty, ListProperty
 
-class StringSelector(GridLayout):
+class N_Selector(GridLayout):
     setting_key = StringProperty()
     settings = ObjectProperty()
-    options = ListProperty(['fixed', 'periodic', 'clamped'])
+    options = ListProperty()
     selected = StringProperty()
 
-    def __init__(self, **kwargs):
+    def __init__(self, options=None, setting_key="", settings=None, **kwargs):
         super().__init__(cols=0, rows=1, **kwargs)
-        # We can't create buttons here yet because setting_key or settings might not be set
+        self.setting_key = setting_key
+        self.settings = settings
+        self.options = options or []
+
         self.bind(setting_key=self._rebuild_buttons,
                   settings=self._rebuild_buttons,
                   options=self._rebuild_buttons)
 
+        self._rebuild_buttons()
+
     def _rebuild_buttons(self, *args):
-        # Clear existing buttons/widgets if any
         self.clear_widgets()
         self.cols = len(self.options)
         self.buttons = {}
+
         if not self.setting_key or not self.settings:
-            return  # Wait until both are set
+            return
 
         for opt in self.options:
             btn = ToggleButton(text=opt, group=self.setting_key)
@@ -29,7 +34,7 @@ class StringSelector(GridLayout):
             self.buttons[opt] = btn
             self.add_widget(btn)
 
-        init = self.settings.get(self.setting_key, self.options[0])
+        init = self.settings.get(self.setting_key, self.options[0] if self.options else "")
         self.selected = init
         if init in self.buttons:
             self.buttons[init].state = 'down'
@@ -38,3 +43,10 @@ class StringSelector(GridLayout):
         self.selected = instance.text
         if self.settings and self.setting_key:
             self.settings.set(self.setting_key, self.selected)
+
+class StringSelector(N_Selector):
+    def __init__(self, **kwargs):
+        super().__init__(
+            options=['fixed', 'periodic', 'clamped'],
+            **kwargs
+        )

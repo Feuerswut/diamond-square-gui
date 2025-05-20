@@ -1,7 +1,7 @@
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
 
-class ActionButtons(GridLayout):
+class N_Buttons(GridLayout):
     _instances = {}  # maps id -> instance
 
     def __new__(cls, **kwargs):
@@ -11,7 +11,6 @@ class ActionButtons(GridLayout):
             parent = existing_instance.parent
             if parent:
                 parent.remove_widget(existing_instance)
-            # Remove old instance from dict to replace it
             del cls._instances[kivy_id]
 
         instance = super().__new__(cls)
@@ -19,31 +18,44 @@ class ActionButtons(GridLayout):
             cls._instances[kivy_id] = instance
         return instance
 
-    def __init__(self, **kwargs):
+    def __init__(self, button_data=None, **kwargs):
+        # Avoid reinitialization
         if getattr(self, '_initialized', False):
             return
-        super().__init__(cols=3, rows=1, **kwargs)
 
-        btn_reset = Button(text='Reset')
-        btn_gen = Button(text='Generate')
-        btn_save = Button(text='Save')
+        # button_data should be a list of tuples: (button_name, button_action)
+        if button_data is None:
+            button_data = []
 
-        btn_reset.bind(on_press=lambda x: None)
-        btn_gen.bind(on_press=lambda x: None)
-        btn_save.bind(on_press=lambda x: None)
+        super().__init__(cols=len(button_data), rows=1, **kwargs)
 
-        self.add_widget(btn_reset)
-        self.add_widget(btn_gen)
-        self.add_widget(btn_save)
+        for name, action in button_data:
+            btn = Button(text=name)
+            if callable(action):
+                btn.bind(on_press=lambda instance, act=action: act())
+            self.add_widget(btn)
 
         self._initialized = True
 
-class SquareOptions(GridLayout):
-    def __init__(self, **kwargs):
-        super().__init__(cols=2, rows=1, **kwargs)
-        opt_btn = Button(text='Options...')
-        gen_btn = Button(text='Generate')
-        opt_btn.bind(on_press=lambda x: None)
-        gen_btn.bind(on_press=lambda x: None)
-        self.add_widget(opt_btn)
-        self.add_widget(gen_btn)
+class ActionButtons(N_Buttons):
+    def __init__(self, 
+                 btn_1_name='Reset', btn_1_action=None, 
+                 btn_2_name='Generate', btn_2_action=None, 
+                 btn_3_name='Save', btn_3_action=None, 
+                 **kwargs):
+        
+        button_data = [
+            (btn_1_name, btn_1_action),
+            (btn_2_name, btn_2_action),
+            (btn_3_name, btn_3_action)
+        ]
+        
+        super().__init__(button_data=button_data, **kwargs)
+
+class SquareOptions(N_Buttons):
+    def __init__(self, opt_action=None, gen_action=None, **kwargs):
+        button_data = [
+            ('Options...', opt_action or (lambda: None)),
+            ('Generate', gen_action or (lambda: None))
+        ]
+        super().__init__(button_data=button_data, **kwargs)
