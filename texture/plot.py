@@ -2,9 +2,10 @@ from kivy.graphics.texture import Texture
 
 from PIL    import Image
 from io     import BytesIO
-from buffer import buffer_manager
 
 import numpy as np
+
+from store.buffer import buffer  # use the singleton instance directly
 
 def remove_padding(padded_array, pad_width=1):
     """
@@ -158,15 +159,15 @@ def colored(array):
 
 def plot():
     """
-    from buffer: numpy array to Kivy texture
+    Convert the stored numpy array in the buffer into a Kivy texture.
     :return: Texture object
     """
-    try: # Load terrain from buffer
-        buffer = buffer_manager.get_buffer()
-        buffer.seek(0)
-        array = np.load(buffer)
+    try:
+        array = buffer.get()  # retrieve the current numpy array contents
+        array = array.reshape(buffer.getnd_shapes()[-1])  # restore last n-D shape if applicable
     except Exception as e:
         print(f"Exception at plot: {str(e)}")
+        return None
 
     image = colored(array)
     image_data = image.tobytes()
@@ -174,10 +175,8 @@ def plot():
     texture = Texture.create(size=image.size, colorfmt='rgba')
     texture.blit_buffer(image_data, colorfmt='rgba', bufferfmt='ubyte')
 
-    # Disable smoothing
     texture.mag_filter = 'nearest'
     texture.min_filter = 'nearest'
 
     texture.flip_vertical()
-
     return texture
