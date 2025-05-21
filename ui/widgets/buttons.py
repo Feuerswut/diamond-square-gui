@@ -44,6 +44,8 @@ class ActionButtons(N_Buttons):
                  btn_3_name='Save', btn_3_action=None, 
                  **kwargs):
         
+        from generate.main import generate_async as btn_2_action
+
         button_data = [
             (btn_1_name, btn_1_action),
             (btn_2_name, btn_2_action),

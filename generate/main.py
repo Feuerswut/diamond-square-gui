@@ -1,10 +1,14 @@
 import threading
 
-from generate.buffer import buffer
+from store.buffer import buffer
 from generate.ds.terrain import make
 from settings.store import settings
 
-def generate():
+# Internal state
+_generate_lock = threading.Lock()
+_generate_thread = None
+
+def generate_ds():
     buffer.clear()
 
     n = settings.get('initial_terrain')  # Terrain size
@@ -36,10 +40,23 @@ def generate():
         seed=None
     )
 
-    buffer.append(terrain)
+    buffer.appendnd(terrain)
+
+    # Release lock when done
+    global _generate_thread
+    with _generate_lock:
+        _generate_thread = None
+
 
 def generate_async():
-    """Run generate() in a separate thread."""
-    thread = threading.Thread(target=generate, name="TerrainGeneratorThread")
-    thread.start()
-    return thread
+    """Run terrain generation in background if not already running."""
+    global _generate_thread
+
+    with _generate_lock:
+        if _generate_thread and _generate_thread.is_alive():
+            print("[INFO] Generation already in progress, skipping new call.")
+            return None  # Ignore duplicate call
+
+        _generate_thread = threading.Thread(target=generate_ds, name="TerrainGeneratorThread")
+        _generate_thread.start()
+        return _generate_thread

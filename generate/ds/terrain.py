@@ -3,7 +3,7 @@ import math
 import numpy as np
 import opensimplex
 
-from terrain_edges  import *
+from generate.ds.terrain_edges  import *
 from PIL            import Image, ImageFilter
 
 def add_noise(heightmap, ttype='simplex', scale=0.01, strength=0.4, seed=0):
