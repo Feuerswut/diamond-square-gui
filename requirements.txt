@@ -1,0 +1,5 @@
+kivy
+kivy-garden
+numpy
+numba
+pillow

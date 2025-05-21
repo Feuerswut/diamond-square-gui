@@ -112,8 +112,12 @@
                 size_hint_y: None
                 height: dp(10)
 
-            ErosionToggleWidget:
-                id: erosion_toggle
-                setting_key: 'erosion'
-                settings: app.settings
-                size_hint_y: 1
+            BoxLayout:
+                size_hint_y: None
+                height: dp(50)
+                spacing: dp(20)
+
+                ErosionToggleWidget:
+                    id: erosion_toggle
+                    setting_key: 'erosion'
+                    settings: app.settings

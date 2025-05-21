@@ -2,7 +2,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.slider import Slider
 from kivy.uix.label import Label
 from kivy.properties import StringProperty, ObjectProperty, NumericProperty, BooleanProperty
-from math import log2
+import math
 
 class SliderWidget(BoxLayout):
     setting_key = StringProperty('')
@@ -52,22 +52,30 @@ class SliderWidget(BoxLayout):
         self.slider.value = value
         self._update_label(value)
 
-
-class ExponentialSliderWidget(SliderWidget):
+class IntegerSliderWidget(SliderWidget):
     def set_value(self, value):
-        # Convert real value to slider value (log2 scale)
-        try:
-            slider_val = log2(value - 1)
-        except (ValueError, TypeError):
-            slider_val = self.min_value  # fallback safe default
+        self.slider.value = value
+        self._update_label(value)
+
+    def _on_value_change(self, instance, value):
+        int_value = int(round(value))
+        self._update_label(int_value)
+        if self.settings and self.setting_key:
+            self.settings.set(self.setting_key, int_value)
+
+    def _update_label(self, value):
+        self.label.text = f'{self.setting_key}: {value}'
+
+class ExponentialSliderWidget(IntegerSliderWidget):
+    def set_value(self, value):
+        # Convert real value to slider value using log2 scale
+        slider_val = math.log2(value + 1)
         self.slider.value = slider_val
         self._update_label(value)
 
     def _on_value_change(self, instance, value):
-        exp_val = (2 ** int(round(value))) + 1
+        # Convert slider value to exponential scale and subtract 1
+        exp_val = (2 ** int(round(value))) - 1
         self._update_label(exp_val)
         if self.settings and self.setting_key:
             self.settings.set(self.setting_key, exp_val)
-
-    def _update_label(self, value):
-        self.label.text = f'{self.setting_key}: {value}'
