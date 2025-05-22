@@ -13,8 +13,9 @@ class Settings:
             'boundary_type'     : 'fixed',      # 'fixed' Boundary Condition
 
             'noise'             : [['simplex', 0.8]],
-            'erosion'           : [["thermal"], ["hydraulic"]],
-            'smoothing'         : [[False]],#[["gauss",  {'sigma': 3.0, 'scale': 8.0}], [False]]
+            'thermal'           : True,
+            'hydraulic'         : True,
+            'smoothing'         : [[False]], # [["gauss",  {'sigma': 3.0, 'scale': 8.0}], [False]]
         }
 
     def set_initial_edge(self, index, value):

@@ -28,7 +28,20 @@ def generate_ds():
         [bottom_left, bottom_right]
     ]
 
-    erosion = settings.get('erosion') or [False]
+    thermal = settings.get('thermal') or False
+    hydraulic = settings.get('hydraulic') or False
+
+    # TODO: UI IMPLEMENT, now: Adapter -------------------------
+    if thermal and hydraulic:
+        erosion = [['thermal'], ['hydraulic']]
+    elif thermal:
+        erosion = [['thermal']]
+    elif hydraulic:
+        erosion = [['hydraulic']]
+    else:
+        erosion = [[False]]
+    # ----------------------------------------------------------
+
     smoothing = settings.get('smoothing') or [False]
 
     print(f"[USER] generate_terrain @ {n}n {ds}ds with {boundary_type} [{corner_values}]")
@@ -38,7 +51,7 @@ def generate_ds():
         roughness=ds,
         boundary=boundary_type,
         corner_values=corner_values,
-        erosion=erosion,
+        erosion=[erosion],
         smoothing=smoothing,
         seed=None
     )
