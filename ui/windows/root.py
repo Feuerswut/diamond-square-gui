@@ -34,7 +34,7 @@ class RootWindow(BoxLayout):
     layout_mode = StringProperty('desktop') # 'desktop', 'intermediate', 'mobile'
 
     INTERMEDIATE_WIDTH_THRESHOLD    = 800 # dp
-    MOBILE_WIDTH_THRESHOLD          = 300 # dp
+    MOBILE_WIDTH_THRESHOLD          = 500 # dp
 
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
