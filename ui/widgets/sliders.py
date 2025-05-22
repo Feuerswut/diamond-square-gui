@@ -75,7 +75,7 @@ class ExponentialSliderWidget(IntegerSliderWidget):
 
     def _on_value_change(self, instance, value):
         # Convert slider value to exponential scale and subtract 1
-        exp_val = (2 ** int(round(value))) - 1
+        exp_val = (2 ** int(round(value))) + 1
         self._update_label(exp_val)
         if self.settings and self.setting_key:
             self.settings.set(self.setting_key, exp_val)

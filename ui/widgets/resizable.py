@@ -63,11 +63,11 @@ class AspectRatioTextureWidget(Widget):
         self.rect.size = (width, height)
         self.rect.pos = (x, y)
 
-    def _update_texture(self, *args):
+    def _update_texture(self, new_texture, *args):
         if self.rect:
-            self.rect.texture = self.texture
+            self.rect.texture = new_texture
             self.canvas.ask_update()
 
-    def update_texture(self, new_texture):
+    def update_texture(self, new_texture: Texture) -> None:
         """Update the texture externally."""
-        self.texture = new_texture
+        self._update_texture(new_texture)
