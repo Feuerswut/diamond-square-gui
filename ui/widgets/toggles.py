@@ -9,10 +9,9 @@ class N_Toggle(GridLayout):
     setting_key = StringProperty('')
     settings = ObjectProperty(None)
     options = ListProperty([])
-    font_size = NumericProperty(16)
 
     def __init__(self, options=None, **kwargs):
-        super().__init__(cols=0, rows=1, size_hint_y=None, height=dp(50), **kwargs)
+        super().__init__(cols=0, rows=1, **kwargs)
 
         self.options = options or []
         self.buttons = {}
@@ -29,7 +28,7 @@ class N_Toggle(GridLayout):
         self.buttons = {}
 
         for opt in self.options:
-            btn = ToggleButton(text=opt, font_size=self.font_size)
+            btn = ToggleButton(text=opt)
             btn.bind(on_state=self._on_toggle)
             self.buttons[opt] = btn
             self.add_widget(btn)
@@ -57,11 +56,11 @@ class ErosionToggleWidget(GridLayout):
     def __init__(self, **kwargs):
         super().__init__(cols=1, size_hint_y=None, **kwargs)
         self.bind(minimum_height = self.setter("height"))
-        self.bind(minimum_width  = self.setter("width" ))
+        self.bind(minimum_width  = self.setter("width"))
 
-        self.label = Label(text='Erosion Types', size_hint_y=None, height=dp(24))
+        self.label = Label(text='Erosion Types')
         self.toggle_group = N_Toggle(
-            options=['Thermal', 'Hydraulic'],
+            options=['thermal', 'hydraulic'],
             **kwargs
         )
 

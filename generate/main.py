@@ -31,7 +31,7 @@ def generate_ds():
     erosion = settings.get('erosion') or [False]
     smoothing = settings.get('smoothing') or [False]
 
-    print(f"[USER] generate_terrain @ {n}n {ds}ds with {boundary_type}")
+    print(f"[USER] generate_terrain @ {n}n {ds}ds with {boundary_type} [{corner_values}]")
 
     terrain = make(
         size=n,
