@@ -32,6 +32,7 @@ class Settings:
             index = int(key.split('_')[-1])
             self.set_initial_edge(index, value)
         elif key in self.settings:
+            print(f"Setting {key} to {value}")  # ← debug
             self.settings[key] = value
     
     def get(self, key, default=None):

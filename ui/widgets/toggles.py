@@ -1,9 +1,9 @@
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.togglebutton import ToggleButton
 from kivy.uix.label import Label
+from kivy.uix.widget import Widget
 
-from kivy.properties import ListProperty, ObjectProperty, StringProperty, NumericProperty
-from kivy.metrics import dp
+from kivy.properties import ListProperty, ObjectProperty, StringProperty
 
 class N_Toggle(GridLayout):
     setting_key = StringProperty('')
@@ -39,30 +39,37 @@ class N_Toggle(GridLayout):
         if not self.settings or not self.setting_key:
             return
 
-        current_states = self.settings.get(self.setting_key, [False] * len(self.options))
-        for i, opt in enumerate(self.options):
-            btn = self.buttons.get(opt)
-            if btn:
-                btn.state = 'down' if i < len(current_states) and current_states[i] else 'normal'
+        # Get the list of active options from settings
+        active_items = [item[0] for item in self.settings.get(self.setting_key, [])]
+        for opt, btn in self.buttons.items():
+            btn.state = 'down' if opt in active_items else 'normal'
 
     def _on_toggle(self, instance, value):
+        print(f"_on_toggle called with: {instance.text}, value={value}")
         if not self.settings or not self.setting_key:
+            print("No settings or setting_key, skipping set")
             return
-
-        states = [self.buttons[opt].state == 'down' for opt in self.options]
-        self.settings.set(self.setting_key, states)
+        print(f"Calling settings.set with key={self.setting_key}")
+        active_items = [[opt] for opt, btn in self.buttons.items() if btn.state == 'down']
+        self.settings.set(self.setting_key, active_items)
 
 class ErosionToggleWidget(GridLayout):
+    setting_key = StringProperty()
+    settings = ObjectProperty()
+
     def __init__(self, **kwargs):
         super().__init__(cols=1, size_hint_y=None, **kwargs)
-        self.bind(minimum_height = self.setter("height"))
-        self.bind(minimum_width  = self.setter("width"))
-
         self.label = Label(text='Erosion Types')
-        self.toggle_group = N_Toggle(
-            options=['thermal', 'hydraulic'],
-            **kwargs
-        )
-
         self.add_widget(self.label)
+
+        # Create toggle_group but don't set properties yet
+        self.toggle_group = N_Toggle(options=['thermal', 'hydraulic'])
         self.add_widget(self.toggle_group)
+
+        # Bind properties so N_Toggle updates when they change
+        self.bind(setting_key=self._update_toggle_settings,
+                  settings=self._update_toggle_settings)
+
+    def _update_toggle_settings(self, *args):
+        self.toggle_group.setting_key = self.setting_key
+        self.toggle_group.settings = self.settings
