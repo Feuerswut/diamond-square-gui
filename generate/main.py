@@ -33,11 +33,11 @@ def generate_ds():
 
     # TODO: UI IMPLEMENT, now: Adapter -------------------------
     if thermal and hydraulic:
-        erosion = [['thermal'], ['hydraulic']]
+        erosion = [['thermal', {}], ['hydraulic', {}]]
     elif thermal:
-        erosion = [['thermal']]
+        erosion = [['thermal', {}]]
     elif hydraulic:
-        erosion = [['hydraulic']]
+        erosion = [['hydraulic', {}]]
     else:
         erosion = [[False]]
     # ----------------------------------------------------------
@@ -51,7 +51,7 @@ def generate_ds():
         roughness=ds,
         boundary=boundary_type,
         corner_values=corner_values,
-        erosion=[erosion],
+        erosion=erosion,
         smoothing=smoothing,
         seed=None
     )

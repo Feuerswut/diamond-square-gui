@@ -3,3 +3,5 @@ kivy-garden
 numpy
 numba
 pillow
+wgpu==0.22.1
+opensimplex
