@@ -1,10 +1,12 @@
 from kivy.graphics.texture import Texture
 
+import numpy as np
+
 from PIL    import Image
 from io     import BytesIO
-from buffer import buffer_manager
 
-import numpy as np
+from store.buffer import data_buffer
+
 
 def remove_padding(padded_array, pad_width=1):
     """
@@ -91,8 +93,7 @@ def grayscale(array, resize=False, **kwargs):
         raise ValueError("Expected a 2D numpy array for grayscale images.")
     
     if resize:
-        pass
-        # resized_array = np.zeros(new_shape, dtype=np.uint16)
+        resized_array = np.zeros(new_shape, dtype=np.uint16)
 
     # Create PIL Image from the normalized array
     image = Image.fromarray(normalized_array, mode='I;16')
@@ -162,12 +163,13 @@ def plot():
     from buffer: numpy array to Kivy texture
     :return: Texture object
     """
-    try: # Load terrain from buffer
-        buffer = buffer_manager.get_buffer()
-        buffer.seek(0)
-        array = np.load(buffer)
+    try:
+        array = data_buffer.get()
+        if array is None or array.size == 0:
+            raise ValueError("Data buffer is empty")
     except Exception as e:
         print(f"Exception at plot: {str(e)}")
+        return None  # Early return if no valid array
 
     image = colored(array)
     image_data = image.tobytes()
@@ -178,7 +180,5 @@ def plot():
     # Disable smoothing
     texture.mag_filter = 'nearest'
     texture.min_filter = 'nearest'
-
-    texture.flip_vertical()
 
     return texture

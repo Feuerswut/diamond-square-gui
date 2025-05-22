@@ -1,0 +1,123 @@
+<ExponentialSliderWidget>:
+    height: dp(80)
+    font_size: sp(16)
+    size_hint_y: None
+
+<SliderWidget>:
+    height: dp(80)
+    font_size: sp(16)
+    size_hint_y: None
+
+<StringSelector>:
+    size_hint_min: [None, dp(40)]
+    size_hint_max: [None, dp(50)]
+
+<ErosionToggleWidget>:
+    size_hint: None, None
+    height: dp(50)
+
+<ContentWidget>:
+    orientation: 'vertical'
+
+    ScrollView:
+        do_scroll_x: False
+        do_scroll_y: True
+
+        GridLayout:
+            id: content_grid
+            cols: 1
+            size_hint_y: None
+            height: self.minimum_height
+            spacing: dp(10)
+            padding: dp(10)
+
+            Label:
+                text: "boundary_condition:"
+                size_hint_y: None
+                height: sp(16) + dp(10)
+
+            StringSelector:
+                id: boundary_type_selector
+                setting_key: 'boundary_type'
+                settings: app.settings
+                font_size: sp(16)
+                size_hint_min: [None, dp(40)]
+                size_hint_max: [None, dp(50)]
+
+            ExponentialSliderWidget:
+                id: initial_terrain_slider
+                setting_key: 'initial_terrain'
+                settings: app.settings
+                min_value: 3
+                max_value: 12
+                integer: True
+                font_size: sp(16)
+                size_hint_y: None
+                height: dp(80)
+
+            SliderWidget:
+                id: roughness_float_slider
+                setting_key: 'roughness_float'
+                settings: app.settings
+                min_value: 0.000
+                max_value: 1.000
+                font_size: sp(16)
+                size_hint_y: None
+                height: dp(80)
+
+            GridLayout:
+                id: edge_grid
+                cols: 2
+                size_hint_y: None
+                height: self.minimum_height
+                spacing: dp(5)
+
+                SliderWidget:
+                    id: initial_edges_0_slider
+                    setting_key: 'initial_edges_0'
+                    settings: app.settings
+                    min_value: 0
+                    max_value: 5
+                    font_size: 14
+                    height: 70
+
+                SliderWidget:
+                    id: initial_edges_1_slider
+                    setting_key: 'initial_edges_1'
+                    settings: app.settings
+                    min_value: 0
+                    max_value: 5
+                    font_size: 14
+                    height: 70
+
+                SliderWidget:
+                    id: initial_edges_2_slider
+                    setting_key: 'initial_edges_2'
+                    settings: app.settings
+                    min_value: 0
+                    max_value: 5
+                    font_size: 14
+                    height: 70
+
+                SliderWidget:
+                    id: initial_edges_3_slider
+                    setting_key: 'initial_edges_3'
+                    settings: app.settings
+                    min_value: 0
+                    max_value: 5
+                    font_size: 14
+                    height: 70
+
+            Widget:
+                size_hint_y: None
+                height: dp(10)
+
+            BoxLayout:
+                size_hint_y: None
+                height: dp(50)
+                spacing: dp(20)
+
+                ErosionToggleWidget:
+                    id: erosion_toggle
+                    setting_key: 'erosion'
+                    settings: app.settings

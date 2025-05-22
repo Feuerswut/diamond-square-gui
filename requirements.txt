@@ -1,5 +1,5 @@
-numpy
-pillow
-opensimplex
 kivy
-plyer
+kivy-garden
+numpy
+numba
+pillow

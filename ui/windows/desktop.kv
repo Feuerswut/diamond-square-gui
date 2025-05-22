@@ -1,0 +1,39 @@
+# ui/desktop.kv
+#:kivy 2.1.0
+
+<RootLayoutDesktop@BoxLayout>:
+    id: root_layout_desktop
+    orientation: "horizontal"
+    padding: dp(5)
+    spacing: dp(5)
+
+    BoxLayout:
+        orientation: "vertical"
+        size_hint_x: 1
+        spacing: dp(2)
+
+        ScrollView:
+            do_scroll_x: False
+            do_scroll_y: True
+
+            ContentWidget:
+                id: content_desktop
+
+        BoxLayout:
+            size_hint_y: None
+            height: dp(50)
+            spacing: dp(20)
+
+            ActionButtons:
+                id: action_buttons
+
+    BoxLayout:
+        id: square_container
+        size_hint: None, None
+        width: min(min(root.width, root.height), max(root.width, root.height) * 0.66)
+        height: min(min(root.width, root.height), max(root.width, root.height) * 0.66)
+        pos: (root.width - self.width, dp(10))
+
+        AspectRatioTextureWidget:
+            id: asp_texture
+            size_hint: 1, 1

@@ -1,6 +1,6 @@
 # Function definitions for terrain generation
 
-def clamp(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) -> float:
+def clamp(d, i, j, v, offsets):
     n = d.shape[0]
     res, k = 0, 0
     for p, q in offsets:
@@ -12,7 +12,7 @@ def clamp(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) -> fl
         k += 1.0
     return res / k
 
-def fixed(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) -> float:
+def fixed(d, i, j, v, offsets):
     n = d.shape[0]
     res, k = 0, 0
     for p, q in offsets:
@@ -22,7 +22,7 @@ def fixed(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) -> fl
             k += 1.0
     return res / k
 
-def mirror(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) -> float:
+def mirror(d, i, j, v, offsets):
     n = d.shape[0]
     res, k = 0, 0
     for p, q in offsets:
@@ -35,14 +35,14 @@ def mirror(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) -> f
         k += 1.0
     return res / k
 
-def periodic(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) -> float:
+def periodic(d, i, j, v, offsets):
     n = d.shape[0] - 1
     res = 0
     for p, q in offsets:
         res += d[(i + p * v) % n, (j + q * v) % n]
     return res / 4.0
 
-def reflective(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) -> float:
+def reflective(d, i, j, v, offsets):
     n = d.shape[0]
     res, k = 0, 0
     for p, q in offsets:
@@ -59,7 +59,7 @@ def reflective(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) 
         k += 1.0
     return res / k
 
-def wrap_around(d: list, i: int, j: int, v: int, offsets: list[tuple[int, int]]) -> float:
+def wrap_around(d, i, j, v, offsets):
     n = d.shape[0]
     res = 0
     for p, q in offsets:
