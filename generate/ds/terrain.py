@@ -6,7 +6,7 @@ import opensimplex
 from generate.ds.terrain_edges  import *
 from PIL            import Image, ImageFilter
 
-from generate.erosion.hydraulic_legacy import hydraulic_erosion
+from generate.erosion.hydraulic_fast import hydraulic_erosion
 from generate.erosion.thermal_legacy import thermal_erosion
 
 def add_noise(heightmap, ttype='simplex', scale=0.01, strength=0.4, seed=0):
