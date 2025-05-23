@@ -3,6 +3,7 @@ Kivy-Garden==0.1.5
 numpy==2.2.5
 numba==0.61.2
 pillow==11.2.1
-wgpu==0.22.1
-glfw==2.5.8
 opensimplex==0.4.5.1
+
+# [OPTIONAL]
+cupy=13.4.1

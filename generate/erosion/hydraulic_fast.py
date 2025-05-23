@@ -14,8 +14,8 @@ def hydraulic_erosion(
     """
 
     # You can replace xp = np with:
-    # try: import cupy as xp
-    # except ImportError: xp = np
+    try: import cupy as xp
+    except ImportError: xp = np
     xp = np
 
     h = heightmap.copy().astype(float)
