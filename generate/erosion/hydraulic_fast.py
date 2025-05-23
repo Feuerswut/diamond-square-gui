@@ -1,6 +1,6 @@
 import numpy as np
 
-def hydraulic_erosion_fast(
+def hydraulic_erosion(
     heightmap:                np.ndarray,
     iterations:               int = 5,
     rain_amount:              float = 0.05,
